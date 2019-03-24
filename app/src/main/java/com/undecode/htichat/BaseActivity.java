@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -108,6 +110,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Connecti
         }
     }
 
+    protected void hideToolbar(){
+        getSupportActionBar().hide();
+    }
+
+    protected void showToolbar(){
+        getSupportActionBar().show();
+    }
+
     @Override
     protected void onDestroy() {
         ButterKnife.bind(this);
@@ -123,5 +133,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Connecti
         } else {
             noConnectionDialog = noInternetConnectionAvailable();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //finish();
+                onBackPressed();
+                break;
+        }
+        return true;
     }
 }

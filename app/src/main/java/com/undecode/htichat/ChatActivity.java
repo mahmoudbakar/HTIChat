@@ -6,7 +6,6 @@ import com.undecode.htichat.chatuitools.ChatView;
 import com.undecode.htichat.chatuitools.models.ChatMessage;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
@@ -19,6 +18,7 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showBackArrow();
         ArrayList<ChatMessage> messages = new ArrayList<>();
         messages.add(new ChatMessage("هاي يا صاحبي", 213543321, ChatMessage.Type.SENT));
         messages.add(new ChatMessage("خير قولي", 2135432143, ChatMessage.Type.RECEIVED));
