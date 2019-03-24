@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:chatview="http://schemas.android.com/apk/res-auto"
+    tools:context=".ChatActivity">
+
+
+    <com.undecode.htichat.chatuitools.ChatView
+        android:id="@+id/chatView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        chatview:inputUseEditorAction="true"
+        chatview:bubbleBackgroundRcv="@color/colorPrimary"
+        chatview:bubbleBackgroundSend="@color/lavendar"/>
+
+    <!--chatview:backgroundColor=""-->
+    <!--chatview:inputBackgroundColor=""-->
+    <!--chatview:inputUseEditorAction="" // true or false-->
+    <!--chatview:inputTextAppearance=""-->
+    <!--chatview:inputTextSize=""-->
+    <!--chatview:inputTextColor=""-->
+    <!--chatview:inputHint=""-->
+    <!--chatview:inputHintColor=""-->
+    <!--chatview:sendBtnIcon=""-->
+    <!--chatview:sendBtnIconTint=""-->
+    <!--chatview:sendBtnBackgroundTint=""-->
+
+
+    <!--chatview:bubbleElevation="" // "flat" or "elevated"-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

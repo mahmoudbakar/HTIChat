@@ -1,6 +1,7 @@
 package com.undecode.htichat;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -19,6 +20,8 @@ public class MainActivity extends BaseActivity {
     Button btnNoInternet;
     @BindView(R.id.btnShowBackArrow)
     Button btnShowBackArrow;
+    @BindView(R.id.btnOpenChat)
+    Button btnOpenChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,5 +61,11 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.btnShowBackArrow)
     public void onBtnShowBackArrowClicked() {
         showBackArrow();
+    }
+
+    @OnClick(R.id.btnOpenChat)
+    public void onOpenChatClicked() {
+        Intent intent = new Intent(this, ChatActivity.class);
+        startActivity(intent);
     }
 }
