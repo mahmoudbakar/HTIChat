@@ -13,6 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:src="@drawable/logo"
+            android:layout_width="match_parent"
+            android:layout_height="180dp" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:text="HTI Chat App"
             android:gravity="center"
