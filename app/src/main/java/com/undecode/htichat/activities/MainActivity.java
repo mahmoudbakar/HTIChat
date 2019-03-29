@@ -1,9 +1,10 @@
-package com.undecode.htichat;
+package com.undecode.htichat.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.Button;
+
+import com.undecode.htichat.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,8 +25,8 @@ public class MainActivity extends BaseActivity {
     Button btnOpenChat;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initView() {
+
     }
 
     @Override

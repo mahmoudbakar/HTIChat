@@ -1,17 +1,25 @@
-package com.undecode.htichat;
+package com.undecode.htichat.activities;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.undecode.htichat.R;
 import com.undecode.htichat.utils.ConnectivityChangeReceiver;
+import com.undecode.htichat.utils.LocaleManager;
+
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +27,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
+
+import static android.content.pm.PackageManager.GET_META_DATA;
 
 public abstract class BaseActivity extends AppCompatActivity implements ConnectivityChangeReceiver.OnConnectivityChangedListener{
 
@@ -32,7 +42,45 @@ public abstract class BaseActivity extends AppCompatActivity implements Connecti
         setContentView(getLayout());
         ButterKnife.bind(this);
         setupNetworkListener();
+        resetTitles();
+        initView();
     }
+
+    public void setLanguage(String language){
+
+        //setting new configuration
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, null);
+
+        //store current language in prefrence
+        //prefData.setCurrentLanguage(language);
+
+        //With new configuration start activity again
+        startActivity(new Intent(this, SplashActivity.class));
+        finish();
+
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
+    }
+
+    protected void resetTitles() {
+        try {
+            ActivityInfo info = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA);
+            if (info.labelRes != 0) {
+                setTitle(info.labelRes);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected abstract void initView();
 
     protected abstract int getLayout();
 
@@ -96,7 +144,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Connecti
         return showAlertDialog(getString(R.string.message_no_connection), getString(R.string.button_retry), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                showProgressDialog(getString(R.string.label_connecting), getString(R.string.message_reconnect));
                 dialog.cancel();
             }
         });
@@ -121,7 +168,34 @@ public abstract class BaseActivity extends AppCompatActivity implements Connecti
     @Override
     protected void onDestroy() {
         ButterKnife.bind(this);
+        unregesterNetworkReciver();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        unregesterNetworkReciver();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        unregesterNetworkReciver();
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        setupNetworkListener();
+        super.onStart();
+    }
+
+    private void unregesterNetworkReciver(){
+        try {
+            unregisterReceiver(connectivityChangeReceiver);
+        }catch (IllegalArgumentException e){
+
+        }
     }
 
     @Override
@@ -129,7 +203,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Connecti
         if (isConnected) {
             noConnectionDialog = null;
             hideDialog();
-            showToast("You are online");
+            //showToast("You are online");
         } else {
             noConnectionDialog = noInternetConnectionAvailable();
         }

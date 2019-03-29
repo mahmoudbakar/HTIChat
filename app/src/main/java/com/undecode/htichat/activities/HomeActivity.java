@@ -1,7 +1,6 @@
-package com.undecode.htichat;
+package com.undecode.htichat.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -9,12 +8,17 @@ import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.undecode.htichat.fragments.ChatsFragment;
+import com.undecode.htichat.R;
+import com.undecode.htichat.utils.LocaleManager;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,8 +27,7 @@ public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,6 +49,17 @@ public class HomeActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_chats);
+        openFragment(new ChatsFragment());
+    }
+
+    private void openFragment(Fragment fragment){
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.frame,fragment,"CHAT");
+        transaction.addToBackStack(null);
+        transaction.commit();
+
     }
 
     @Override
@@ -78,7 +92,7 @@ public class HomeActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
@@ -93,19 +107,23 @@ public class HomeActivity extends BaseActivity
 
         switch (id){
             case R.id.nav_chats:
-                showToast("Chat Clicked");
+                openFragment(new ChatsFragment());
                 break;
             case R.id.nav_friends:
                 showToast("Friends Clicked");
+                LocaleManager.setNewLocale(this, LocaleManager.LANGUAGE_KEY_ARABIC);
+                setLanguage("ar");
                 break;
             case R.id.nav_groups:
                 showToast("Groups Clicked");
+                LocaleManager.setNewLocale(this, LocaleManager.LANGUAGE_KEY_ENGLISH);
+                setLanguage("en");
                 break;
             case R.id.nav_profile:
-                showToast("Profile Clicked");
+                startActivity(new Intent(this, ProfileActivity.class));
                 break;
             case R.id.nav_settings:
-                showToast("Settings Clicked");
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
         }
 

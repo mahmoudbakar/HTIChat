@@ -1,8 +1,9 @@
-package com.undecode.htichat;
+package com.undecode.htichat.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.Button;
+
+import com.undecode.htichat.R;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import butterknife.BindView;
@@ -18,8 +19,7 @@ public class LoginActivity extends BaseActivity {
     Button btnLogin;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initView() {
         hideToolbar();
         hideKeyboard();
     }
