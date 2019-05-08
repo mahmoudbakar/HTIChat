@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.showAlertDialog)
     public void onShowAlertDialogClicked() {
-        showAlertDialog("This is test alert dialog", getString(R.string.button_ok), new DialogInterface.OnClickListener() {
+        showAlertDialog("", "This is test alert dialog", getString(R.string.button_ok), null, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

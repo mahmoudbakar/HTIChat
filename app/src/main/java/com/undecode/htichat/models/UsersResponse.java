@@ -1,20 +1,22 @@
 package com.undecode.htichat.models;
 
-import java.util.List;
-import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import javax.annotation.Generated;
+
 @Generated("com.robohorse.robopojogenerator")
-public class UsersResponse{
+public class UsersResponse {
 
-	@SerializedName("Array")
-	private List<LoginResponse> array;
+    @SerializedName("users")
+    private List<User> users;
 
-	public void setArray(List<LoginResponse> array){
-		this.array = array;
-	}
+    public List<User> getUsers() {
+        return users;
+    }
 
-	public List<LoginResponse> getArray(){
-		return array;
-	}
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }

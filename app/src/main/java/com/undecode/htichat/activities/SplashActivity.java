@@ -4,11 +4,13 @@ package com.undecode.htichat.activities;
 import android.content.Intent;
 
 import com.undecode.htichat.R;
+import com.undecode.htichat.utils.MyPreference;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SplashActivity extends BaseActivity {
+
 
     @Override
     protected void initView() {
@@ -16,7 +18,11 @@ public class SplashActivity extends BaseActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                if (new MyPreference().isLogin()){
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                }else {
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
                 finish();
             }
         }, 5000);

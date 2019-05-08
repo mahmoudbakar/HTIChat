@@ -3,9 +3,12 @@ package com.undecode.htichat.network;
 import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.undecode.htichat.models.LoginResponse;
+import com.undecode.htichat.models.RoomsResponse;
 import com.undecode.htichat.models.SignupRequest;
 import com.undecode.htichat.models.UpdateProfileRequest;
+import com.undecode.htichat.models.User;
 import com.undecode.htichat.models.UsersResponse;
+import com.undecode.htichat.utils.MyPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,9 +17,11 @@ public class API {
     private static API api = null;
     private static Gson gson;
     private Requests requests;
+    private MyPreference preference;
 
     private API() {
         this.requests = Requests.getInstance();
+        preference = new MyPreference();
         gson = new Gson();
     }
 
@@ -41,7 +46,9 @@ public class API {
                     new OnResponse.ObjectResponse<JSONObject>() {
                         @Override
                         public void onSuccess(JSONObject object) {
-                            response.onSuccess(gson.fromJson(object.toString(), LoginResponse.class));
+                            LoginResponse loginResponse = gson.fromJson(object.toString(), LoginResponse.class);
+                            preference.login(loginResponse);
+                            response.onSuccess(loginResponse);
                         }
                     }, errorResponse);
         } catch (JSONException e) {
@@ -95,11 +102,13 @@ public class API {
     public void getUsers(OnResponse.ObjectResponse<UsersResponse> response, OnResponse.ErrorResponse errorResponse) {
         String url = EndPoints.LOGIN;
         requests.jsonObjectRequest(Request.Method.GET, url, null, Request.Priority.IMMEDIATE,
-                new OnResponse.ObjectResponse<JSONObject>() {
-                    @Override
-                    public void onSuccess(JSONObject object) {
-                        response.onSuccess(gson.fromJson(object.toString(), UsersResponse.class));
-                    }
-                }, errorResponse);
+                object -> response.onSuccess(gson.fromJson(object.toString(), UsersResponse.class)), errorResponse);
     }
+
+    public void getRooms(OnResponse.ObjectResponse<RoomsResponse> response, OnResponse.ErrorResponse errorResponse) {
+        String url = EndPoints.ROOMS;
+        requests.jsonObjectRequest(Request.Method.GET, url, null, Request.Priority.IMMEDIATE,
+                object -> response.onSuccess(gson.fromJson(object.toString(), RoomsResponse.class)), errorResponse);
+    }
+
 }

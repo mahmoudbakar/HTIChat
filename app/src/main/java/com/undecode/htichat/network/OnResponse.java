@@ -22,7 +22,6 @@ public interface OnResponse
     }
 
     public interface ErrorResponse{
-        public void onAlreadyLoggedIn();
         public void onNoInternet();
         public void onNotAuthorized();
         public void onNotAllowedMethod();

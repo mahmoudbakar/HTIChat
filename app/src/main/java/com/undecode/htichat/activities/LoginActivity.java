@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.widget.Button;
 
 import com.undecode.htichat.R;
+import com.undecode.htichat.models.LoginResponse;
+import com.undecode.htichat.network.API;
+import com.undecode.htichat.network.OnResponse;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import butterknife.BindView;
@@ -31,7 +34,11 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.btnLogin)
     public void onLoginClicked() {
-        startActivity(new Intent(this, HomeActivity.class));
-        finish();
+        showProgressDialog();
+        API.getInstance().login(edEmail.getText().toString(), edPassword.getText().toString(),
+                object -> {
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                }, this);
     }
 }

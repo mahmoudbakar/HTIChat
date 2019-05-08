@@ -3,24 +3,30 @@ package com.undecode.htichat.network;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.undecode.htichat.utils.MyPreference;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Requests {
     private static final String TAG = "BAKAR API ";
-    private static Requests instance = null;
     private static final int TIMEOUT = 10000;
     private static final int RETRIES = 2;
-
+    private static Requests instance = null;
     private SingleRequestQueue singleRequestQueue;
+    private MyPreference preference;
 
     private Requests(Context context) {
         singleRequestQueue = SingleRequestQueue.getInstance(context);
+        preference = new MyPreference();
     }
 
     public static synchronized Requests getInstance(Context context) {
@@ -38,12 +44,12 @@ public class Requests {
     }
 
     /**
-     * @param requestType
-     * @param url
-     * @param requestJsonObject
-     * @param priority
-     * @param responseListener
-     * @param errorResponse     send this with null if you wanna use MasterBaseActivity Ashour
+     * @param requestType       type ( GET - POST - DELETE )
+     * @param url               the end point url
+     * @param requestJsonObject JSONObject Request
+     * @param priority          set request priority
+     * @param responseListener  success response interface
+     * @param errorResponse     error response interface
      */
     JsonObjectRequest jsonObjectRequest(int requestType,
                                         String url,
@@ -58,28 +64,22 @@ public class Requests {
             Log.e(TAG + "REQUEST", requestJsonObject.toString());
         }
         OnResponse.ErrorResponse finalErrorResponse = errorResponse;
-        JsonObjectRequest tempRequest = null;
         JsonObjectRequest request = new JsonObjectRequest(requestType, url, requestJsonObject,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e(TAG + "RESPONSE", response.toString());
-                        responseListener.onSuccess(response);
-                    }
+                response -> {
+                    Log.e(TAG + "RESPONSE", response.toString());
+                    responseListener.onSuccess(response);
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //if internet connection Available it will not be null
-                        int responseCode = 9000;
-                        if (error.networkResponse != null) {
-                            responseCode = error.networkResponse.statusCode;
-                        } else {
-                            if (finalErrorResponse != null) {
-                                //finalErrorResponse.onNoInternet();
-                            }
-                            Log.d(TAG + "ERROR", responseCode + " No Internet Connection Available");
+                error -> {
+            errorResponse.onNoInternet();
+                    //if internet connection Available it will not be null
+                    int responseCode = 9000;
+                    if (error.networkResponse != null) {
+                        responseCode = error.networkResponse.statusCode;
+                    } else {
+                        if (finalErrorResponse != null) {
+                            //finalErrorResponse.onNoInternet();
                         }
+                        Log.d(TAG + "ERROR", responseCode + " No Internet Connection Available");
                     }
                 }) {
             @Override
@@ -92,6 +92,10 @@ public class Requests {
                 return priority;
             }
 
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return getRequestHeaders();
+            }
         };
         request.setRetryPolicy(new DefaultRetryPolicy(
                 TIMEOUT,
@@ -118,9 +122,6 @@ public class Requests {
 
     private void handle400(String message, OnResponse.ErrorResponse errorResponse, JSONObject jsonObject) {
         switch (message) {
-            case "User is logged.":
-                errorResponse.onAlreadyLoggedIn();
-                break;
             case "User is not logged.":
                 errorResponse.onNotAuthorized();
                 break;
@@ -130,5 +131,16 @@ public class Requests {
             default:
                 errorResponse.onBadRequest(jsonObject);
         }
+    }
+
+    private Map<String, String> getRequestHeaders() {
+        Map<String, String> header = new HashMap<>();
+
+        header.put("AUTH", preference.getToken());
+        for (Map.Entry<String, String> entry :
+                header.entrySet()) {
+            Log.wtf(TAG + "HEADER", entry.getKey() + " : " + entry.getValue());
+        }
+        return header;
     }
 }
