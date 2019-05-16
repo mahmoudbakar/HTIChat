@@ -19,6 +19,9 @@ public class RoomsItem{
 	@SerializedName("users")
 	private List<User> users;
 
+	@SerializedName("messages")
+	private List<MessagesItem> messages;
+
 	public void setRoomId(int roomId){
 		this.roomId = roomId;
 	}
@@ -49,5 +52,13 @@ public class RoomsItem{
 
 	public List<User> getUsers(){
 		return users;
+	}
+
+	public List<MessagesItem> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<MessagesItem> messages) {
+		this.messages = messages;
 	}
 }

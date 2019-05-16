@@ -1,11 +1,23 @@
 package com.undecode.htichat.activities;
 
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 import com.undecode.htichat.R;
 import com.undecode.htichat.chatuitools.ChatView;
 import com.undecode.htichat.chatuitools.models.ChatMessage;
+import com.undecode.htichat.models.MessagesItem;
+import com.undecode.htichat.models.RoomsItem;
+import com.undecode.htichat.models.SendMessageRequest;
+import com.undecode.htichat.models.User;
+import com.undecode.htichat.network.API;
+import com.undecode.htichat.utils.DateHelper;
+import com.undecode.htichat.utils.MyPreference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import butterknife.BindView;
 
@@ -14,38 +26,50 @@ public class ChatActivity extends BaseActivity {
     @BindView(R.id.chatView)
     ChatView chatView;
 
-    @Override
-    protected void initView() {
-        showBackArrow();
-        ArrayList<ChatMessage> messages = new ArrayList<>();
-        messages.add(new ChatMessage("هاي يا صاحبي", 213543321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 2135432143, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213545321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543217, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213546321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543213, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213547321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543215, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213594321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543281, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213547321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 2135432121, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213546321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543215, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213543321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543212, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 2135421321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543214, ChatMessage.Type.RECEIVED));
-        messages.add(new ChatMessage("هاي يا صاحبي", 213354321, ChatMessage.Type.SENT));
-        messages.add(new ChatMessage("خير قولي", 213543221, ChatMessage.Type.RECEIVED));
-        chatView.addMessages(messages);
-    }
+    RoomsItem roomsItem;
+    Gson gson;
+    ArrayList<ChatMessage> messages;
+    DateHelper dateHelper;
+    User user;
 
     @Override
     protected int getLayout() {
         return R.layout.activity_chat;
     }
 
+    @Override
+    protected void initView() {
+        showBackArrow();
+        getData();
+        chatView.setOnSentMessageListener(chatMessage -> {
+            messages.add(chatMessage);
+            SendMessageRequest request = new SendMessageRequest();
+            request.setFile("");
+            request.setRoomId(roomsItem.getRoomId());
+            request.setType("message");
+            request.setMessage(chatMessage.getMessage());
+            API.getInstance().sendMessage(request, object -> Toast.makeText(ChatActivity.this, "sent", Toast.LENGTH_SHORT).show(), ChatActivity.this);
+            return true;
+        });
+    }
 
-
+    private void getData() {
+        user = new MyPreference().getMine();
+        gson = new Gson();
+        dateHelper = new DateHelper();
+        messages = new ArrayList<>();
+        String room = getIntent().getStringExtra("room");
+        Log.wtf("BAKAR Room2", room);
+        roomsItem = gson.fromJson(room, RoomsItem.class);
+        for (MessagesItem item :
+                roomsItem.getMessages()) {
+            if (item.getSenderId() == user.getId()) {
+                messages.add(new ChatMessage(item.getMessage(), dateHelper.getTimeOfDate(item.getSendDate()), ChatMessage.Type.SENT));
+            } else {
+                messages.add(new ChatMessage(item.getMessage(), dateHelper.getTimeOfDate(item.getSendDate()), ChatMessage.Type.RECEIVED));
+            }
+        }
+        Collections.reverse(messages);
+        chatView.addMessages(messages);
+    }
 }

@@ -24,7 +24,7 @@ public class MyPreference {
         editor.apply();
     }
 
-    private void setToken(String token) {
+    public void setToken(String token) {
         editor.putString(KEY_TOKEN, token);
         editor.commit();
     }

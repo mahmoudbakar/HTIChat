@@ -10,6 +10,7 @@ import android.view.View;
 import com.google.android.material.navigation.NavigationView;
 import com.undecode.htichat.fragments.ChatsFragment;
 import com.undecode.htichat.R;
+import com.undecode.htichat.fragments.UsersFragment;
 import com.undecode.htichat.utils.LocaleManager;
 
 import androidx.core.view.GravityCompat;
@@ -107,12 +108,10 @@ public class HomeActivity extends BaseActivity
 
         switch (id){
             case R.id.nav_chats:
-                openFragment(new ChatsFragment());
+                goToFragment(new ChatsFragment(), R.id.frame, "");
                 break;
             case R.id.nav_friends:
-                showToast("Friends Clicked");
-                LocaleManager.setNewLocale(this, LocaleManager.LANGUAGE_KEY_ARABIC);
-                setLanguage("ar");
+                goToFragment(new UsersFragment(), R.id.frame, "");
                 break;
             case R.id.nav_groups:
                 showToast("Groups Clicked");
@@ -126,22 +125,7 @@ public class HomeActivity extends BaseActivity
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
         }
-
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

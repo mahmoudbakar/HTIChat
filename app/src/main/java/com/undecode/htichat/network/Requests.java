@@ -6,11 +6,11 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.undecode.htichat.utils.MyPreference;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -62,6 +62,8 @@ public class Requests {
         Log.d(TAG + "URL", url + "     " + requestType);
         if (requestJsonObject != null) {
             Log.e(TAG + "REQUEST", requestJsonObject.toString());
+        } else {
+            Log.wtf(TAG + "REQUEST", "There is no RequestObject for this");
         }
         OnResponse.ErrorResponse finalErrorResponse = errorResponse;
         JsonObjectRequest request = new JsonObjectRequest(requestType, url, requestJsonObject,
@@ -69,19 +71,7 @@ public class Requests {
                     Log.e(TAG + "RESPONSE", response.toString());
                     responseListener.onSuccess(response);
                 },
-                error -> {
-            errorResponse.onNoInternet();
-                    //if internet connection Available it will not be null
-                    int responseCode = 9000;
-                    if (error.networkResponse != null) {
-                        responseCode = error.networkResponse.statusCode;
-                    } else {
-                        if (finalErrorResponse != null) {
-                            //finalErrorResponse.onNoInternet();
-                        }
-                        Log.d(TAG + "ERROR", responseCode + " No Internet Connection Available");
-                    }
-                }) {
+                error -> handleError(error, finalErrorResponse)) {
             @Override
             public String getBodyContentType() {
                 return "application/json";
@@ -118,6 +108,46 @@ public class Requests {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         request.setTag(TAG);
         singleRequestQueue.addToRequestQueue(request);
+    }
+
+    private void handleError(VolleyError error, OnResponse.ErrorResponse errorResponse) {
+        int responseCode = 5000;
+        if (error.networkResponse != null) {
+            responseCode = error.networkResponse.statusCode;
+            Log.wtf(TAG + "ERROR", responseCode + new String(error.networkResponse.data));
+            errorResponse.onBadRequest(null);
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(new String(error.networkResponse.data));
+            } catch (JSONException e) {
+            }
+            switch (responseCode) {
+                case 400:
+                    errorResponse.onBadRequest(jsonObject);
+                    break;
+                case 401:
+                    errorResponse.onNotAuthorized();
+                    break;
+                case 403:
+                    errorResponse.onForbidden();
+                    break;
+                case 404:
+                    errorResponse.onApiNotFound();
+                    break;
+                case 405:
+                    errorResponse.onApiNotFound();
+                    break;
+                case 440:
+                    errorResponse.onNotAuthorized();
+                    break;
+                case 500:
+                    errorResponse.onServerSideError();
+                    break;
+            }
+        } else {
+            errorResponse.onNoInternet();
+            Log.wtf(TAG + "ERROR", responseCode + " No Internet Connection Available");
+        }
     }
 
     private void handle400(String message, OnResponse.ErrorResponse errorResponse, JSONObject jsonObject) {

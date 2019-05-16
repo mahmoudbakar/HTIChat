@@ -3,6 +3,7 @@ package com.undecode.htichat.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.undecode.htichat.R;
 import com.undecode.htichat.activities.ChatActivity;
 import com.undecode.htichat.models.RoomsItem;
@@ -29,8 +31,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     private Activity activity;
     private Context context;
     private List<RoomsItem> items;
+    private Gson gson;
 
     public ChatsAdapter(Activity activity, Context context) {
+        gson = new Gson();
         this.activity = activity;
         this.context = context;
         items = new ArrayList<>();
@@ -58,13 +62,28 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         User user;
 
         if (new MyPreference().getMine().getId() == item.getUsers().get(0).getId()){
-            user = item.getUsers().get(1);
+            try{
+                user = item.getUsers().get(1);
+            } catch (IndexOutOfBoundsException e){
+                user = item.getUsers().get(0);
+            }
         }else {
-            user = item.getUsers().get(0);
+                user = item.getUsers().get(0);
         }
 
-        holder.itemView.setOnClickListener(v -> context.startActivity(new Intent(context, ChatActivity.class)));
+        holder.itemView.setOnClickListener(v ->{
+            Intent intent = new Intent(context, ChatActivity.class);
+            String room = gson.toJson(item);
+            Log.wtf("BAKAR Room", room);
+            intent.putExtra("room", room);
+            context.startActivity(intent);
+        });
         holder.txtName.setText(user.getName());
+        try{
+            holder.txtMessage.setText(item.getMessages().get(0).getMessage());
+        }catch (Exception e){
+
+        }
         Glide.with(holder.itemView).load(user.getImage()).into(holder.image);
     }
 
@@ -73,7 +92,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         return items.size();
     }
 
-    static
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image)
         CircleImageView image;

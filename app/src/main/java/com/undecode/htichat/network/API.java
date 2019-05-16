@@ -3,10 +3,12 @@ package com.undecode.htichat.network;
 import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.undecode.htichat.models.LoginResponse;
+import com.undecode.htichat.models.MessagesItem;
+import com.undecode.htichat.models.RoomsItem;
 import com.undecode.htichat.models.RoomsResponse;
+import com.undecode.htichat.models.SendMessageRequest;
 import com.undecode.htichat.models.SignupRequest;
 import com.undecode.htichat.models.UpdateProfileRequest;
-import com.undecode.htichat.models.User;
 import com.undecode.htichat.models.UsersResponse;
 import com.undecode.htichat.utils.MyPreference;
 
@@ -91,16 +93,11 @@ public class API {
     public void getUser(int id, OnResponse.ObjectResponse<LoginResponse> response, OnResponse.ErrorResponse errorResponse) {
         String url = EndPoints.LOGIN + "/" + id;
         requests.jsonObjectRequest(Request.Method.GET, url, null, Request.Priority.IMMEDIATE,
-                new OnResponse.ObjectResponse<JSONObject>() {
-                    @Override
-                    public void onSuccess(JSONObject object) {
-                        response.onSuccess(gson.fromJson(object.toString(), LoginResponse.class));
-                    }
-                }, errorResponse);
+                object -> response.onSuccess(gson.fromJson(object.toString(), LoginResponse.class)), errorResponse);
     }
 
     public void getUsers(OnResponse.ObjectResponse<UsersResponse> response, OnResponse.ErrorResponse errorResponse) {
-        String url = EndPoints.LOGIN;
+        String url = EndPoints.USERS;
         requests.jsonObjectRequest(Request.Method.GET, url, null, Request.Priority.IMMEDIATE,
                 object -> response.onSuccess(gson.fromJson(object.toString(), UsersResponse.class)), errorResponse);
     }
@@ -111,4 +108,41 @@ public class API {
                 object -> response.onSuccess(gson.fromJson(object.toString(), RoomsResponse.class)), errorResponse);
     }
 
+    public void sendMessage(SendMessageRequest request, OnResponse.ObjectResponse<MessagesItem> response, OnResponse.ErrorResponse errorResponse) {
+        String url = EndPoints.SEND;
+        try {
+            requests.jsonObjectRequest(Request.Method.POST, url, new JSONObject(gson.toJson(request)), Request.Priority.IMMEDIATE,
+                    object -> response.onSuccess(gson.fromJson(object.toString(), MessagesItem.class)), errorResponse);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateToken(String token, OnResponse.ObjectResponse<JSONObject> response, OnResponse.ErrorResponse errorResponse) {
+        String url = EndPoints.TOKEN;
+        try {
+            JSONObject request = new JSONObject();
+            request.put("firebaseToken", token);
+            requests.jsonObjectRequest(Request.Method.POST, url,request, Request.Priority.IMMEDIATE,
+                    object -> {
+                        response.onSuccess(object);
+                    }, errorResponse);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createRoom(int userID, OnResponse.ObjectResponse<RoomsItem> response, OnResponse.ErrorResponse errorResponse) {
+        String url = EndPoints.CREATE_ROOM;
+        try {
+            JSONObject request = new JSONObject();
+            request.put("receiver_id", userID);
+            requests.jsonObjectRequest(Request.Method.POST, url,request, Request.Priority.IMMEDIATE,
+                    object -> {
+                        response.onSuccess(gson.fromJson(object.toString(), RoomsItem.class));
+                    }, errorResponse);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

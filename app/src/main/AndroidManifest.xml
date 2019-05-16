@@ -16,6 +16,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        <service
+            android:name=".MyFireBaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -28,17 +36,13 @@
                 android:resource="@xml/picker_provider_paths" />
         </provider>
 
-        <activity android:name=".activities.ProfileActivity"/>
-
+        <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.SettingsActivity" />
-
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".activities.LoginActivity" />
-
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,11 +50,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".activities.ChatActivity" />
-
         <activity android:name=".activities.MainActivity" />
-
     </application>
 
 </manifest>

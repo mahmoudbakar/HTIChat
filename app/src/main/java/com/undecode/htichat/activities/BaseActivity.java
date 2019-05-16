@@ -27,9 +27,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.undecode.htichat.R;
+import com.undecode.htichat.network.API;
 import com.undecode.htichat.network.OnResponse;
 import com.undecode.htichat.utils.ConnectivityChangeReceiver;
 import com.undecode.htichat.utils.LocaleManager;
+import com.undecode.htichat.utils.MyPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -327,6 +329,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Connecti
     @Override
     public void onNotAuthorized() {
         hideProgressDialog();
+        showToast("Your Session Expired");
+        new MyPreference().setToken("");
+        openActivity(LoginActivity.class, null, true);
     }
 
     @Override

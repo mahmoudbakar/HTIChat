@@ -5,8 +5,10 @@ import android.widget.Button;
 
 import com.undecode.htichat.R;
 import com.undecode.htichat.models.LoginResponse;
+import com.undecode.htichat.models.User;
 import com.undecode.htichat.network.API;
 import com.undecode.htichat.network.OnResponse;
+import com.undecode.htichat.utils.MyPreference;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import butterknife.BindView;
@@ -25,6 +27,13 @@ public class LoginActivity extends BaseActivity {
     protected void initView() {
         hideToolbar();
         hideKeyboard();
+        MyPreference preference = new MyPreference();
+        User user = preference.getMine();
+        if (user != null){
+            if (user.getPhone().length() > 3){
+                edEmail.setText(user.getPhone());
+            }
+        }
     }
 
     @Override

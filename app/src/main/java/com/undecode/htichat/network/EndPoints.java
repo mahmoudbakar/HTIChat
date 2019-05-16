@@ -5,4 +5,7 @@ public interface EndPoints {
     String USERS = SERVER + "getusers.php";
     String LOGIN = SERVER + "login.php";
     String ROOMS = SERVER + "getrooms.php";
+    String SEND = SERVER + "sendmessage.php";
+    String TOKEN = SERVER + "updatetoken.php";
+    String CREATE_ROOM = SERVER + "createroom.php";
 }
