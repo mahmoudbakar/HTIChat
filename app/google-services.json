@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "13320111617",
+    "firebase_url": "https://chat-dc693.firebaseio.com",
+    "project_id": "chat-dc693",
+    "storage_bucket": "chat-dc693.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13320111617:android:0fe4977d0684dfd1",
+        "android_client_info": {
+          "package_name": "com.undecode.htichat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13320111617-i8dak3hphuscop2d1mqd702mqpelhg46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.undecode.htichat",
+            "certificate_hash": "ea0b436f8b8a80f461a7499dd98b082ec35de6a4"
+          }
+        },
+        {
+          "client_id": "13320111617-ah40q6dk71l1ah061cauvjhrptnuqilh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTarL299VvwnMmmjctUHZouokmMcKYr0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13320111617-ah40q6dk71l1ah061cauvjhrptnuqilh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
