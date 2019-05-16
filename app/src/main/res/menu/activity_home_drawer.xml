@@ -13,6 +13,7 @@
             android:icon="@drawable/ic_person_black"
             android:title="Friends" />
         <item
+            android:visible="false"
             android:id="@+id/nav_groups"
             android:icon="@drawable/ic_group_black"
             android:title="Groups" />
@@ -26,6 +27,7 @@
                 android:icon="@drawable/ic_edit_black"
                 android:title="Profile" />
             <item
+                android:visible="false"
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="Settings" />
