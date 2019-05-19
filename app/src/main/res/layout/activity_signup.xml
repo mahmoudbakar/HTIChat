@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.SignupActivity">
 
     <LinearLayout
         android:layout_gravity="center"
@@ -16,7 +16,7 @@
         <ImageView
             android:src="@drawable/logo"
             android:layout_width="match_parent"
-            android:layout_height="180dp" />
+            android:layout_height="100dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="iBird"
@@ -43,8 +43,38 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edName"
+                    android:inputType="textPersonName"
+                    android:hint="Full Name"
+                    android:text=""
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edEmail"
                     android:inputType="textEmailAddress"
+                    android:hint="Email"
+                    android:text=""
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edPhone"
+                    android:inputType="phone"
                     android:hint="Phone"
                     android:text=""
                     android:layout_width="match_parent"
@@ -72,17 +102,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 android:background="@drawable/button_selector"
-                android:text="LOGIN"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:layout_marginTop="5dp"
-                android:id="@+id/btnSignup"
-                android:textSize="16sp"
-                android:textColor="@color/colorPrimary"
-                android:background="@color/white"
-                android:text="Sign up"
+                android:text="SignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

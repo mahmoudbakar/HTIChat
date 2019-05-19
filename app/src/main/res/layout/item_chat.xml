@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="Mahmoud Emad Saad"
-                android:textColor="@color/black"
+                android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
 
             <TextView
@@ -59,6 +59,7 @@
                 android:text="Yesterday" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/txtMessageCount"
                 android:layout_width="25dp"
                 android:layout_height="25dp"

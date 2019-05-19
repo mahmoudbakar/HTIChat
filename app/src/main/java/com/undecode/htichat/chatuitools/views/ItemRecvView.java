@@ -3,8 +3,10 @@ package com.undecode.htichat.chatuitools.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.undecode.htichat.R;
 
 import androidx.annotation.ColorInt;
@@ -19,6 +21,7 @@ import androidx.cardview.widget.CardView;
 public class ItemRecvView extends MessageView {
 
     private CardView bubble;
+    private ImageView imageView;
     private TextView messageTextView, timestampTextView;
 
     /**
@@ -36,6 +39,17 @@ public class ItemRecvView extends MessageView {
         messageTextView.setText(message);
 
 
+    }
+
+    @Override
+    public void setImage(String link) {
+        if (imageView == null) {
+
+            imageView = (ImageView) findViewById(R.id.image);
+
+        }
+        imageView.setVisibility(VISIBLE);
+        Glide.with(imageView).load(link).into(imageView);
     }
 
     /**

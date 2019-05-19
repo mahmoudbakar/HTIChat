@@ -13,17 +13,37 @@ public class ChatMessage {
     private String message;
     private long timestamp;
     private Type type;
+    private String messageType;
     private String sender;
+    private String link;
 
-    public ChatMessage(String message, long timestamp, Type type) {
+    public ChatMessage(String message, long timestamp, Type type, String messageType, String link) {
         this.message = message;
         this.timestamp = timestamp;
         this.type = type;
+        this.messageType = messageType;
+        this.link = link;
     }
 
-    public ChatMessage(String message, long timestamp, Type type, String sender) {
-        this(message, timestamp, type);
+    public ChatMessage(String message, long timestamp, Type type, String sender, String messageType, String link) {
+        this(message, timestamp, type, messageType, link);
         this.sender = sender;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public long getTimestamp() {

@@ -25,6 +25,8 @@ public abstract class MessageView extends FrameLayout {
      */
     public abstract void setMessage(String message);
 
+    public abstract void setImage(String link);
+
     /**
      * Method to set the timestamp that the message was received or sent on the screen.
      *

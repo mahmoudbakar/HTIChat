@@ -1,17 +1,18 @@
 package com.undecode.htichat.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Button;
 
+import androidx.appcompat.widget.AppCompatEditText;
+
 import com.undecode.htichat.R;
-import com.undecode.htichat.models.LoginResponse;
 import com.undecode.htichat.models.User;
 import com.undecode.htichat.network.API;
-import com.undecode.htichat.network.OnResponse;
 import com.undecode.htichat.utils.MyPreference;
 
-import androidx.appcompat.widget.AppCompatEditText;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity {
@@ -29,8 +30,8 @@ public class LoginActivity extends BaseActivity {
         hideKeyboard();
         MyPreference preference = new MyPreference();
         User user = preference.getMine();
-        if (user != null){
-            if (user.getPhone().length() > 3){
+        if (user != null) {
+            if (user.getPhone().length() > 3) {
                 edEmail.setText(user.getPhone());
             }
         }
@@ -49,5 +50,10 @@ public class LoginActivity extends BaseActivity {
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     finish();
                 }, this);
+    }
+
+    @OnClick(R.id.btnSignup)
+    public void onSignupClicked() {
+        openActivity(SignupActivity.class, null, false);
     }
 }

@@ -14,11 +14,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.undecode.htichat.R;
 import com.undecode.htichat.utils.FileUtils;
-import com.vansuita.pickimage.bean.PickResult;
-import com.vansuita.pickimage.bundle.PickSetup;
-import com.vansuita.pickimage.dialog.PickImageDialog;
-import com.vansuita.pickimage.listeners.IPickCancel;
-import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,30 +67,30 @@ public class ProfileActivity extends BaseActivity {
 
     @OnClick(R.id.btnEditImage)
     public void onBtnEditImageClicked() {
-        final File[] actualImage = new File[1];
-        final boolean[] isImageChanged = {false};
-
-        PickImageDialog.build(new PickSetup()).setOnPickResult(new IPickResult() {
-            @Override
-            public void onPickResult(PickResult r) {
-                try {
-                    actualImage[0] = FileUtils.from(ProfileActivity.this, r.getUri());
-                    isImageChanged[0] = true;
-                    Glide.with(imageProfile).clear(imageProfile);
-                    imageProfile.setImageBitmap(r.getBitmap());
-                    Glide.with(imageCover).clear(imageCover);
-                    imageCover.setImageBitmap(r.getBitmap());
-                    //Toast.makeText(context, "Selected", Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        })
-                .setOnPickCancel(new IPickCancel() {
-                    @Override
-                    public void onCancelClick() {
-                    }
-                }).show((FragmentActivity) this);
+//        final File[] actualImage = new File[1];
+//        final boolean[] isImageChanged = {false};
+//
+//        PickImageDialog.build(new PickSetup()).setOnPickResult(new IPickResult() {
+//            @Override
+//            public void onPickResult(PickResult r) {
+//                try {
+//                    actualImage[0] = FileUtils.from(ProfileActivity.this, r.getUri());
+//                    isImageChanged[0] = true;
+//                    Glide.with(imageProfile).clear(imageProfile);
+//                    imageProfile.setImageBitmap(r.getBitmap());
+//                    Glide.with(imageCover).clear(imageCover);
+//                    imageCover.setImageBitmap(r.getBitmap());
+//                    //Toast.makeText(context, "Selected", Toast.LENGTH_SHORT).show();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        })
+//                .setOnPickCancel(new IPickCancel() {
+//                    @Override
+//                    public void onCancelClick() {
+//                    }
+//                }).show((FragmentActivity) this);
     }
 
     @OnClick(R.id.btnEditDate)
