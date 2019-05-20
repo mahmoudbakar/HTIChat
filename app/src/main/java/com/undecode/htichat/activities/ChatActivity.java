@@ -1,16 +1,17 @@
 package com.undecode.htichat.activities;
 
 
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.gson.Gson;
-import com.greentoad.turtlebody.mediapicker.MediaPicker;
-import com.greentoad.turtlebody.mediapicker.core.MediaPickerConfig;
 import com.undecode.htichat.R;
 import com.undecode.htichat.chatuitools.ChatView;
 import com.undecode.htichat.chatuitools.models.ChatMessage;
@@ -19,15 +20,22 @@ import com.undecode.htichat.models.RoomsItem;
 import com.undecode.htichat.models.SendMessageRequest;
 import com.undecode.htichat.models.User;
 import com.undecode.htichat.network.API;
+import com.undecode.htichat.network.FileModel;
+import com.undecode.htichat.network.OnResponse;
 import com.undecode.htichat.utils.DateHelper;
 import com.undecode.htichat.utils.MyPreference;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickCancel;
+import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import butterknife.BindView;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ChatActivity extends BaseActivity {
 
@@ -39,6 +47,9 @@ public class ChatActivity extends BaseActivity {
     ArrayList<ChatMessage> messages;
     DateHelper dateHelper;
     User user;
+    @BindView(R.id.btnAttach)
+    ImageButton btnAttach;
+    //private AudioRecordButton audioRecordButton;
 
     @Override
     protected int getLayout() {
@@ -64,6 +75,28 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void initView() {
         showBackArrow();
+
+//        audioRecordButton = (AudioRecordButton) findViewById(R.id.audio_record_button);
+//        audioRecordButton.setOnAudioListener(new AudioListener() {
+//            @Override
+//            public void onStop(RecordingItem recordingItem) {
+//                Toast.makeText(getBaseContext(), "Audio...", Toast.LENGTH_SHORT).show();
+//                AudioRecording audioRecording = new AudioRecording(getBaseContext());
+//
+//                audioRecording.play(recordingItem);
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Toast.makeText(getBaseContext(), "Cancel", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                Log.d("MainActivity", "Error: " + e.getMessage());
+//            }
+//        });
+
         getData();
         refresh();
         chatView.setOnSentMessageListener(chatMessage -> {
@@ -156,5 +189,48 @@ public class ChatActivity extends BaseActivity {
         handler = null;
         API.getInstance().cancelRequests();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.btnAttach)
+    public void onViewClicked() {
+        //final File[] actualImage = new File[1];
+
+        PickImageDialog.build(new PickSetup()).setOnPickResult(new IPickResult() {
+            @Override
+            public void onPickResult(PickResult r) {
+                //actualImage[0] = FileUtils.from(ChatActivity.this, r.getUri());
+                //Toast.makeText(context, "Selected", Toast.LENGTH_SHORT).show();
+                FileModel fileModel = null;
+                fileModel = new FileModel(r.getPath());
+                API.getInstance().uploadFile(fileModel, new OnResponse.ObjectResponse<String>() {
+                    @Override
+                    public void onSuccess(String object) {
+                        SendMessageRequest request = new SendMessageRequest();
+                        request.setRoomId(roomsItem.getRoomId());
+                        request.setType("picture");
+                        request.setFile(object);
+                        request.setMessage("");
+                        API.getInstance().sendMessage(request, new OnResponse.ObjectResponse<MessagesItem>() {
+                            @Override
+                            public void onSuccess(MessagesItem object) {
+
+                            }
+                        }, ChatActivity.this);
+                    }
+                });
+            }
+        })
+                .setOnPickCancel(new IPickCancel() {
+                    @Override
+                    public void onCancelClick() {
+                    }
+                }).show((FragmentActivity) ChatActivity.this);
     }
 }

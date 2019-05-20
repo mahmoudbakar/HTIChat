@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HTI Chat</string>
+    <string name="app_name">iBird</string>
     <string name="button_ok">OK</string>
     <string name="message_no_connection">No Network Found!!</string>
     <string name="message_reconnect">Trying to reconnect</string>

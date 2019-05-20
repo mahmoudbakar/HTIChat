@@ -17,6 +17,8 @@ import com.undecode.htichat.utils.MyPreference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.undecode.htichat.network.EndPoints.UPLOAD;
+
 public class API {
     private static API api = null;
     private static Gson gson;
@@ -157,5 +159,14 @@ public class API {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void uploadFile(FileModel fileModel, OnResponse.ObjectResponse<String> response) {
+        requests.multipartRequest(UPLOAD, null, fileModel, new OnResponse.ObjectResponse<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject object) {
+                response.onSuccess(object.optString("file"));
+            }
+        });
     }
 }

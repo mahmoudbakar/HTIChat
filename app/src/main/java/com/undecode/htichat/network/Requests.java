@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.undecode.htichat.utils.MyPreference;
@@ -172,5 +174,63 @@ public class Requests {
             Log.wtf(TAG + "HEADER", entry.getKey() + " : " + entry.getValue());
         }
         return header;
+    }
+
+    public void multipartRequest(String url, final Map<String, String> txtData, final FileModel fileModel, OnResponse.ObjectResponse<JSONObject> response)
+    {
+        MultipartRequest multipartRequest = new MultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>()
+        {
+            @Override
+            public void onResponse(NetworkResponse r)
+            {
+                String s = new String(r.data);
+                try {
+                    response.onSuccess(new JSONObject(s));
+                } catch (JSONException e) {
+                    response.onSuccess(null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+            }
+        })
+        {
+//            @Override
+//            public String getBodyContentType()
+//            {
+//                return "Content-Type: form-data; charset=utf-8";
+//            }
+
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return txtData;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData()
+            {
+                Map<String, DataPart> files = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                if (fileModel != null)
+                {
+                    files.put("file", new DataPart(fileModel.getName(), fileModel.getFile(), fileModel.getMime()));
+                }
+
+                return files;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return getRequestHeaders();
+            }
+        };
+        multipartRequest.setTag("R");
+        multipartRequest.setShouldCache(false);
+        singleRequestQueue.addToRequestQueue(multipartRequest);
     }
 }

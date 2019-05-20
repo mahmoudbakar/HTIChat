@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:chatview="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:chatview="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.ChatActivity">
-
 
     <com.undecode.htichat.chatuitools.ChatView
         android:id="@+id/chatView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        chatview:inputUseEditorAction="true"
         chatview:bubbleBackgroundRcv="@color/colorPrimary"
-        chatview:bubbleBackgroundSend="@color/lavendar"/>
+        chatview:bubbleBackgroundSend="@color/lavendar"
+        chatview:inputUseEditorAction="true" />
 
-    <!--chatview:backgroundColor=""-->
-    <!--chatview:inputBackgroundColor=""-->
-    <!--chatview:inputUseEditorAction="" // true or false-->
-    <!--chatview:inputTextAppearance=""-->
-    <!--chatview:inputTextSize=""-->
-    <!--chatview:inputTextColor=""-->
-    <!--chatview:inputHint=""-->
-    <!--chatview:inputHintColor=""-->
-    <!--chatview:sendBtnIcon=""-->
-    <!--chatview:sendBtnIconTint=""-->
-    <!--chatview:sendBtnBackgroundTint=""-->
+
+    <ImageButton
+        android:id="@+id/btnAttach"
+        android:layout_margin="8dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_attach"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <!--<br.com.safety.audio_recorder.AudioRecordButton-->
+        <!--android:id="@+id/audio_record_button"-->
+        <!--android:layout_width="90dp"-->
+        <!--android:layout_height="90dp"-->
+        <!--android:layout_marginBottom="75dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_alignParentBottom="true"/>-->
+
+    <!--chatview:backgroundColor=""--><!--chatview:inputBackgroundColor=""--><!--chatview:inputUseEditorAction="" // true or false--><!--chatview:inputTextAppearance=""--><!--chatview:inputTextSize=""--><!--chatview:inputTextColor=""--><!--chatview:inputHint=""--><!--chatview:inputHintColor=""--><!--chatview:sendBtnIcon=""--><!--chatview:sendBtnIconTint=""--><!--chatview:sendBtnBackgroundTint=""-->
 
 
     <!--chatview:bubbleElevation="" // "flat" or "elevated"-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

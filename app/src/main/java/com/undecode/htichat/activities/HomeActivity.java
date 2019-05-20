@@ -118,12 +118,12 @@ public class HomeActivity extends BaseActivity
                 LocaleManager.setNewLocale(this, LocaleManager.LANGUAGE_KEY_ENGLISH);
                 setLanguage("en");
                 break;
-            case R.id.nav_profile:
-                startActivity(new Intent(this, ProfileActivity.class));
-                break;
-            case R.id.nav_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
+//            case R.id.nav_profile:
+//                startActivity(new Intent(this, ProfileActivity.class));
+//                break;
+//            case R.id.nav_settings:
+//                startActivity(new Intent(this, SettingsActivity.class));
+//                break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
